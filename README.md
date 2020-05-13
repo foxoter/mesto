@@ -2,4 +2,11 @@
 
 Training project.
 
-Website link: https://foxoter.github.io/mesto/
+### Techologies used:
+* HTML
+* CSS
+* JS
+
+**Website link**
+
+* [Link](https://foxoter.github.io/mesto/)
