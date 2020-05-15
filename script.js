@@ -9,11 +9,16 @@ const newCardButton = document.querySelector('.user-info__button');
 const closeFormButton = newCardForm.querySelector('.popup__close');
 const editProfileButton = document.querySelector('.user-info__edit');
 const closeEditButton = document.querySelector('.edit-popup__close');
+let heroName = document.querySelector('.user-info__name');
+let heroJob = document.querySelector('.user-info__job');
 const newCardData = document.forms.new;
 const editFormData = document.forms.edit;
 const inputPlace = newCardData.elements.place;
 const inputLink = newCardData.elements.link;
 const inputName = editFormData.elements.name;
+const inputAbout = editFormData.elements.about;
+
+
 
 /* Функции */
 
@@ -69,7 +74,19 @@ function openEditForm() {
     editFormData.reset();
   }
   editForm.classList.toggle('edit-popup_is-opened');
+  inputName.value = heroName.textContent;
+  inputAbout.value = heroJob.textContent;
   inputName.focus();
+}
+
+// Сохранить обновленную информацию профиля
+function saveEditData(event) {
+  event.preventDefault();
+  if (event.target.classList.contains('edit-popup__button')) {
+    heroName.textContent = inputName.value;
+    heroJob.textContent = inputAbout.value;
+    openEditForm();
+  }
 }
 
 // Поставить и убрать лайк
@@ -104,7 +121,7 @@ newCardButton.addEventListener('click', openForm);
 closeFormButton.addEventListener('click', openForm);
 editProfileButton.addEventListener('click', openEditForm);
 closeEditButton.addEventListener('click', openEditForm);
-
+editFormData.addEventListener('click', saveEditData);
 cardsContainer.addEventListener('click', likeHandler);
 newCardData.addEventListener('submit', submitCardClick);
 cardsContainer.addEventListener('click', deleteCard);
