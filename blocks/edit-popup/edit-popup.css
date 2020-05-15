@@ -1,0 +1,20 @@
+@import url(./__content/edit-popup__content.css);
+@import url(./__button/edit-popup__button.css);
+@import url(./__close/edit-popup__close.css);
+
+.edit-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.edit-popup_is-opened {
+    display: flex;
+}

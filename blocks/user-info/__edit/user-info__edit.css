@@ -1,0 +1,11 @@
+.user-info__edit {
+    background: black;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.user-info__edit:focus {
+    outline-color: greenyellow;
+}

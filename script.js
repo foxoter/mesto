@@ -1,14 +1,19 @@
-'use strict'; // Очень хорошо!
+'use strict';
 
 /* Переменные */
 
 const cardsContainer = document.querySelector('.places-list');
 const newCardForm = document.querySelector('.popup');
+const editForm = document.querySelector('.edit-popup');
 const newCardButton = document.querySelector('.user-info__button');
 const closeFormButton = newCardForm.querySelector('.popup__close');
+const editProfileButton = document.querySelector('.user-info__edit');
+const closeEditButton = document.querySelector('.edit-popup__close');
 const newCardData = document.forms.new;
-const inputName = newCardData.elements.name;
+const editFormData = document.forms.edit;
+const inputPlace = newCardData.elements.place;
 const inputLink = newCardData.elements.link;
+const inputName = editFormData.elements.name;
 
 /* Функции */
 
@@ -40,11 +45,8 @@ function addCard(card) {
 }
 
 // Добавить коллекцию карточек из массива
-
-// Можно лучше -- стрелочные функции
-// (item) => {...}
 function addCollection(array) {
-  array.forEach(function (item) {
+  array.forEach((item) => {
     const newCard = createNewCard(item.name, item.link);
     addCard(newCard);
   });
@@ -52,17 +54,21 @@ function addCollection(array) {
 
 /* Обработчики событий */
 
-// - Добавил строку, которая перекидывает фокус. Иначе он остаётся на кнопке открытия формы,
-// - и после первого клика, форма закрывается и открывается клавишами Space и Enter.
-
-// Очень хорошее решение, тем более что пользователю удобно, когда курсор уже в поле.
-
 // Открыть и закрыть форму новой карточки
 function openForm() {
   if (!newCardForm.classList.contains('.popup_is-opened')) {
     newCardData.reset();
   }
   newCardForm.classList.toggle('popup_is-opened');
+  inputPlace.focus();
+}
+
+// Открыть и закрыть форму редактирования профиля
+function openEditForm() {
+  if (!editForm.classList.contains('edit-popup_is-opened')) {
+    editFormData.reset();
+  }
+  editForm.classList.toggle('edit-popup_is-opened');
   inputName.focus();
 }
 
@@ -75,10 +81,9 @@ function likeHandler(event) {
 
 // Добавить новую карточку по клику
 function submitCardClick(event) {
-  // Проверка полей -- отлично!
   event.preventDefault();
-  if (inputName.value !== '' && inputLink.value !== '') {
-    const newCard = createNewCard(inputName.value, inputLink.value);
+  if (inputPlace.value !== '' && inputLink.value !== '') {
+    const newCard = createNewCard(inputPlace.value, inputLink.value);
     addCard(newCard);
     newCardData.reset();
     openForm();
@@ -97,6 +102,9 @@ function deleteCard(event) {
 
 newCardButton.addEventListener('click', openForm);
 closeFormButton.addEventListener('click', openForm);
+editProfileButton.addEventListener('click', openEditForm);
+closeEditButton.addEventListener('click', openEditForm);
+
 cardsContainer.addEventListener('click', likeHandler);
 newCardData.addEventListener('submit', submitCardClick);
 cardsContainer.addEventListener('click', deleteCard);
