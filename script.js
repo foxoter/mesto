@@ -11,6 +11,9 @@ const editProfileButton = document.querySelector('.user-info__edit');
 const closeEditButton = document.querySelector('.edit-popup__close');
 let heroName = document.querySelector('.user-info__name');
 let heroJob = document.querySelector('.user-info__job');
+const closePicButton = document.querySelector('.image-popup__close');
+const imagePopup = document.querySelector('.image-popup');
+const imagePopupPicture = imagePopup.querySelector('.image-popup__picture');
 const newCardData = document.forms.new;
 const editFormData = document.forms.edit;
 const inputPlace = newCardData.elements.place;
@@ -89,6 +92,17 @@ function saveEditData(event) {
   }
 }
 
+// Открыть картинку
+function openImage(event) {
+  if (event.target.classList.contains('place-card__image')) {
+    imagePopup.classList.toggle('image-popup_is-opened');
+    const picture = event.target.style.backgroundImage.slice(5, -2);
+    imagePopupPicture.setAttribute('src', picture);
+  } else if (event.target.classList.contains('image-popup__close')) {
+    imagePopup.classList.toggle('image-popup_is-opened');
+  }
+}
+
 // Поставить и убрать лайк
 function likeHandler(event) {
   if (event.target.classList.contains('place-card__like-icon')) {
@@ -125,5 +139,13 @@ editFormData.addEventListener('click', saveEditData);
 cardsContainer.addEventListener('click', likeHandler);
 newCardData.addEventListener('submit', submitCardClick);
 cardsContainer.addEventListener('click', deleteCard);
+cardsContainer.addEventListener('click', openImage);
+closePicButton.addEventListener('click', openImage);
 
 addCollection(initialCards);
+
+
+
+
+
+
