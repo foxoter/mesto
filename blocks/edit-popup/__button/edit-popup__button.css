@@ -3,10 +3,12 @@
     height: 50px;
     border: 1px solid rgba(0, 0, 0, .2);
     margin-top: 48px;
-    color: rgba(0, 0, 0, .2);
     font-size: 18px;
     line-height: 22px;
-    background-color: transparent;
     display: block;
     cursor: pointer;
+    /*color: rgba(0, 0, 0, .2);*/
+    /*background-color: transparent;*/
+    background-color: black;
+    color: white;
 }

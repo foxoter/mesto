@@ -7,6 +7,7 @@ const newCardForm = document.querySelector('.popup');
 const editForm = document.querySelector('.edit-popup');
 const newCardButton = document.querySelector('.user-info__button');
 const closeFormButton = newCardForm.querySelector('.popup__close');
+const addPlaceButton = newCardForm.querySelector('.popup__button');
 const editProfileButton = document.querySelector('.user-info__edit');
 const closeEditButton = document.querySelector('.edit-popup__close');
 let heroName = document.querySelector('.user-info__name');
@@ -66,6 +67,13 @@ function addCollection(array) {
 function openForm() {
   if (!newCardForm.classList.contains('.popup_is-opened')) {
     newCardData.reset();
+
+    // После закрытия формы кнопка снова делается неактивной.
+    // Добавляются соответствующий атрибут и меняется класс.
+    // Хорошая ли практика писать это тут?
+
+    addPlaceButton.classList.remove('popup__button_mode_on');
+    addPlaceButton.setAttribute('disabled', 'true');
   }
   newCardForm.classList.toggle('popup_is-opened');
   inputPlace.focus();
@@ -92,7 +100,7 @@ function saveEditData(event) {
   }
 }
 
-// Открыть картинку
+// Открыть и закрыть картинку
 function openImage(event) {
   if (event.target.classList.contains('place-card__image')) {
     imagePopup.classList.toggle('image-popup_is-opened');
@@ -129,6 +137,36 @@ function deleteCard(event) {
   }
 }
 
+// Активация, деакцтивация кнопки добавления новой карточки
+function inputHandlerNewCard(event) {
+  const place = event.currentTarget.elements.place;
+  const link = event.currentTarget.elements.link;
+
+  if (place.value !== '' && link.value !== '') {
+    addPlaceButton.classList.add('popup__button_mode_on');
+    addPlaceButton.removeAttribute('disabled');
+  } else {
+    addPlaceButton.classList.remove('popup__button_mode_on');
+    addPlaceButton.setAttribute('disabled', 'true');
+  }
+}
+
+// Активация, деакцтивация кнопки редактирования профиля
+function inputHandlerEdit(event) {
+  const name = event.currentTarget.elements.name;
+  const about = event.currentTarget.elements.about;
+  const button = event.currentTarget.save;
+
+  if (name.value === '' || about.value === '') {
+    button.classList.add('edit-popup__button_mode_off');
+    button.setAttribute('disabled', 'true');
+  } else {
+    button.classList.remove('edit-popup__button_mode_off');
+    button.removeAttribute('disabled');
+  }
+}
+
+
 /* Слушатели событий */
 
 newCardButton.addEventListener('click', openForm);
@@ -141,11 +179,7 @@ newCardData.addEventListener('submit', submitCardClick);
 cardsContainer.addEventListener('click', deleteCard);
 cardsContainer.addEventListener('click', openImage);
 closePicButton.addEventListener('click', openImage);
+newCardData.addEventListener('input', inputHandlerNewCard);
+editFormData.addEventListener('input', inputHandlerEdit);
 
 addCollection(initialCards);
-
-
-
-
-
-

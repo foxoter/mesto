@@ -1,6 +1,7 @@
 @import url(./__content/edit-popup__content.css);
 @import url(./__button/edit-popup__button.css);
 @import url(./__close/edit-popup__close.css);
+@import url(./__button/_mode/edit-popup__button_mode_off.css);
 
 .edit-popup {
     position: fixed;
