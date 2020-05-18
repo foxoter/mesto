@@ -4,12 +4,13 @@
 
 const cardsContainer = document.querySelector('.places-list');
 const newCardForm = document.querySelector('.popup');
-const editForm = document.querySelector('.edit-popup');
 const newCardButton = document.querySelector('.user-info__button');
 const closeFormButton = newCardForm.querySelector('.popup__close');
 const addPlaceButton = newCardForm.querySelector('.popup__button');
+const editForm = document.querySelector('.edit-popup');
 const editProfileButton = document.querySelector('.user-info__edit');
 const closeEditButton = document.querySelector('.edit-popup__close');
+const saveEditButton = editForm.querySelector('.popup__button');
 let heroName = document.querySelector('.user-info__name');
 let heroJob = document.querySelector('.user-info__job');
 const closePicButton = document.querySelector('.image-popup__close');
@@ -21,6 +22,10 @@ const inputPlace = newCardData.elements.place;
 const inputLink = newCardData.elements.link;
 const inputName = editFormData.elements.name;
 const inputAbout = editFormData.elements.about;
+const inputNameError = editFormData.querySelector('#name-error');
+const inputAboutError = editFormData.querySelector('#about-error');
+const inputPlaceError = newCardData.querySelector('#place-error');
+const inputLinkError = newCardData.querySelector('#link-error');
 
 
 
@@ -67,13 +72,10 @@ function addCollection(array) {
 function openForm() {
   if (!newCardForm.classList.contains('.popup_is-opened')) {
     newCardData.reset();
-
-    // После закрытия формы кнопка снова делается неактивной.
-    // Добавляются соответствующий атрибут и меняется класс.
-    // Хорошая ли практика писать это тут?
-
     addPlaceButton.classList.remove('popup__button_mode_on');
-    addPlaceButton.setAttribute('disabled', 'true');
+    addPlaceButton.setAttribute('disabled', 'disabled');
+    inputPlaceError.textContent = '';
+    inputLinkError.textContent = '';
   }
   newCardForm.classList.toggle('popup_is-opened');
   inputPlace.focus();
@@ -83,6 +85,10 @@ function openForm() {
 function openEditForm() {
   if (!editForm.classList.contains('edit-popup_is-opened')) {
     editFormData.reset();
+    saveEditButton.classList.remove('popup__button_mode_on');
+    saveEditButton.setAttribute('disabled', 'disabled');
+    inputNameError.textContent = '';
+    inputAboutError.textContent = '';
   }
   editForm.classList.toggle('edit-popup_is-opened');
   inputName.value = heroName.textContent;
@@ -137,35 +143,43 @@ function deleteCard(event) {
   }
 }
 
-// Активация, деакцтивация кнопки добавления новой карточки
-function inputHandlerNewCard(event) {
-  const place = event.currentTarget.elements.place;
-  const link = event.currentTarget.elements.link;
-
-  if (place.value !== '' && link.value !== '') {
-    addPlaceButton.classList.add('popup__button_mode_on');
-    addPlaceButton.removeAttribute('disabled');
-  } else {
-    addPlaceButton.classList.remove('popup__button_mode_on');
-    addPlaceButton.setAttribute('disabled', 'true');
+// Валидация текстового поля
+function checkInputValidity(event) {
+  const field = event.target;
+  const error = field.parentNode.querySelector(`#${field.id}-error`);
+  field.setCustomValidity('');
+  if (field.validity.valueMissing) {
+    field.setCustomValidity('Это обязательно поле');
+  } else if (field.validity.typeMismatch) {
+    field.setCustomValidity('Здесь должна быть ссылка');
+  } else if (field.validity.tooShort || field.validity.tooLong) {
+    field.setCustomValidity('Должно быть от 2 до 30 символов');
   }
+  error.textContent = field.validationMessage;
 }
 
-// Активация, деакцтивация кнопки редактирования профиля
-function inputHandlerEdit(event) {
-  const name = event.currentTarget.elements.name;
-  const about = event.currentTarget.elements.about;
-  const button = event.currentTarget.save;
-
-  if (name.value === '' || about.value === '') {
-    button.classList.add('edit-popup__button_mode_off');
-    button.setAttribute('disabled', 'true');
-  } else {
-    button.classList.remove('edit-popup__button_mode_off');
+// Валидация кнопки
+function setSubmitButtonState(event) {
+  const elements = Array.from(event.currentTarget.elements);
+  const inputs = elements.slice(0, 2);
+  const button = elements[2];
+  const buttonState = inputs.every(function (item) {
+    return item.validity.valid;
+  });
+  if (buttonState) {
+    button.classList.add('popup__button_mode_on');
     button.removeAttribute('disabled');
+  } else {
+    button.classList.remove('popup__button_mode_on');
+    button.setAttribute('disabled', 'disabled');
   }
 }
 
+// Повесить валидаторы на форму
+function setEventListeners(form) {
+  form.addEventListener('input', checkInputValidity);
+  form.addEventListener('input', setSubmitButtonState);
+}
 
 /* Слушатели событий */
 
@@ -179,7 +193,20 @@ newCardData.addEventListener('submit', submitCardClick);
 cardsContainer.addEventListener('click', deleteCard);
 cardsContainer.addEventListener('click', openImage);
 closePicButton.addEventListener('click', openImage);
-newCardData.addEventListener('input', inputHandlerNewCard);
-editFormData.addEventListener('input', inputHandlerEdit);
+
 
 addCollection(initialCards);
+setEventListeners(editFormData);
+setEventListeners(newCardData);
+
+
+
+
+
+
+
+
+
+
+
+

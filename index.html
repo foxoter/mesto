@@ -30,9 +30,30 @@
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new">
-            <input required type="text" name="place" class="popup__input popup__input_type_name" placeholder="Название">
-            <input required type="text" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку">
-            <button type="submit" class="button popup__button" disabled>+</button>
+            <input
+                type="text"
+                name="place"
+                id="place"
+                class="popup__input popup__input_type_name"
+                placeholder="Название"
+                required
+                minlength="2" maxlength="30"
+            >
+            <span id="place-error" class="error-message error-message_position_upper"></span>
+            <input
+                type="url"
+                name="link"
+                id="link"
+                class="popup__input popup__input_type_link-url"
+                placeholder="Ссылка на картинку"
+                required
+            >
+            <span id="link-error" class="error-message"></span>
+            <button
+                type="submit"
+                class="button popup__button"
+                disabled
+            >+</button>
         </form>
       </div>
     </div>
@@ -41,20 +62,41 @@
         <img src="./images/close.svg" alt="" class="edit-popup__close">
         <h3 class="popup__title">Редактировать профиль</h3>
         <form class="popup__form" name="edit">
-          <input required type="text" name="name" class="popup__input" placeholder="Имя">
-          <input required type="text" name="about" class="popup__input" placeholder="О себе">
-          <button class="edit-popup__button" name="save">Сохранить</button>
+          <input
+              type="text"
+              name="name"
+              id="name"
+              class="popup__input"
+              placeholder="Имя"
+              required
+              minlength="2" maxlength="30"
+          >
+          <span id="name-error" class="error-message error-message_position_upper"></span>
+          <input
+              type="text"
+              name="about"
+              id="about"
+              class="popup__input"
+              placeholder="О себе"
+              required
+              minlength="2" maxlength="30"
+          >
+          <span id="about-error" class="error-message"></span>
+          <button
+              type="submit"
+              class="button popup__button edit-popup__button"
+              disabled
+              name="save"
+          >Сохранить</button>
         </form>
       </div>
     </div>
-
     <div class="image-popup">
       <div class="image-popup__container">
         <img src="./images/close.svg" alt="" class="image-popup__close">
         <img class="image-popup__picture" alt="place">
       </div>
     </div>
-
   </div>
   <script src="data.js"></script>
   <script src="script.js"></script>
