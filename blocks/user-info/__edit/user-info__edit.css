@@ -4,6 +4,7 @@
     cursor: pointer;
     font-size: 12px;
     line-height: 15px;
+    border: solid white 1px;
 }
 
 .user-info__edit:focus {
