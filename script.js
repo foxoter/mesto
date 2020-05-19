@@ -1,3 +1,5 @@
+// Проект на Гитхабе: https://github.com/foxoter/mesto
+
 'use strict';
 
 /* Переменные */
@@ -59,45 +61,52 @@ function addCollection(array) {
 // Открыть и закрыть форму новой карточки
 function openForm() {
   const addPlaceButton = newCardForm.querySelector('.popup__button');
+  const inputPlace = newCardData.elements.place;
+  const placeError = newCardData.querySelector('#place-error');
+  const linkError = newCardData.querySelector('#link-error');
 
   if (!newCardForm.classList.contains('.popup_is-opened')) {
     newCardData.reset();
     addPlaceButton.classList.remove('popup__button_mode_on');
     addPlaceButton.setAttribute('disabled', 'disabled');
-    newCardData.querySelector('#place-error').textContent = '';
-    newCardData.querySelector('#link-error').textContent = '';
+    placeError.textContent = '';
+    linkError.textContent = '';
   }
   newCardForm.classList.toggle('popup_is-opened');
-  newCardData.elements.place.focus();
+  inputPlace.focus();
 }
 
 // Открыть и закрыть форму редактирования профиля
 function openEditForm() {
   let heroName = document.querySelector('.user-info__name');
   let heroJob = document.querySelector('.user-info__job');
+  const inputName = editFormData.elements.name;
+  const inputAbout = editFormData.elements.about;
+  const nameError = editFormData.querySelector('#name-error');
+  const aboutError = editFormData.querySelector('#about-error');
 
   if (!editForm.classList.contains('edit-popup_is-opened')) {
     editFormData.reset();
-
-    editFormData.querySelector('#name-error').textContent = '';
-    editFormData.querySelector('#about-error').textContent = '';
+    nameError.textContent = '';
+    aboutError.textContent = '';
   }
   editForm.classList.toggle('edit-popup_is-opened');
-  editFormData.elements.name.value = heroName.textContent;
-  editFormData.elements.about.value = heroJob.textContent;
-  editFormData.elements.name.focus();
+  inputName.value = heroName.textContent;
+  inputAbout.value = heroJob.textContent;
+  inputName.focus();
+
 }
 
 // Сохранить обновленную информацию профиля
 function saveEditData(event) {
   let heroName = document.querySelector('.user-info__name');
   let heroJob = document.querySelector('.user-info__job');
+  const inputName = editFormData.elements.name;
+  const inputAbout = editFormData.elements.about;
   event.preventDefault();
-  if (event.target.classList.contains('edit-popup__button')) {
-    heroName.textContent = editFormData.elements.name.value;
-    heroJob.textContent = editFormData.elements.about.value;
-    openEditForm();
-  }
+  heroName.textContent = inputName.value;
+  heroJob.textContent = inputAbout.value;
+  openEditForm();
 }
 
 // Открыть и закрыть картинку
@@ -183,7 +192,7 @@ newCardButton.addEventListener('click', openForm);
 closeFormButton.addEventListener('click', openForm);
 editProfileButton.addEventListener('click', openEditForm);
 closeEditButton.addEventListener('click', openEditForm);
-editFormData.addEventListener('click', saveEditData);
+editFormData.addEventListener('submit', saveEditData);
 cardsContainer.addEventListener('click', likeHandler);
 newCardData.addEventListener('submit', submitCardClick);
 cardsContainer.addEventListener('click', deleteCard);
