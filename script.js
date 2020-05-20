@@ -3,20 +3,13 @@
 /* Переменные */
 
 const cardsContainer = document.querySelector('.places-list');
-
 const newCardForm = document.querySelector('.popup');
-
 const newCardButton = document.querySelector('.user-info__button');
 const closeFormButton = newCardForm.querySelector('.popup__close');
-
 const editForm = document.querySelector('.edit-popup');
-
 const editProfileButton = document.querySelector('.user-info__edit');
 const closeEditButton = editForm.querySelector('.popup__close');
-
 const closePicButton = document.querySelector('.image-popup__close');
-/* done - REVIEW. Можно лучше. В стилевых правилах написания js-кода требуется, чтобы поиск DOM-элементов во всём проекте
-осуществлялся одним способом, например только с помощью querySelector */
 const newCardData = document.querySelector('#new-card');
 const editFormData = document.querySelector('#edit-form');
 
@@ -91,7 +84,6 @@ function openNewCardForm(popupElement) {
   renderPopup(popupElement);
 }
 
-
 // Открыть форму редактирования профиля
 function openEditForm(popupElement) {
   let heroName = document.querySelector('.user-info__name');
@@ -105,7 +97,6 @@ function openEditForm(popupElement) {
   inputName.value = heroName.textContent;
   inputAbout.value = heroJob.textContent;
 }
-
 
 // Сохранить обновленную информацию профиля
 function saveEditData(event) {
@@ -204,7 +195,6 @@ function setEventListeners(popup) {
 }
 
 /* Слушатели событий */
-
 editProfileButton.addEventListener('click', function () {openEditForm(editForm)});
 closeEditButton.addEventListener('click', function () {openEditForm(editForm)});
 newCardButton.addEventListener('click', function (){openNewCardForm(newCardForm)});
