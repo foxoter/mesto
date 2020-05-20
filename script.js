@@ -1,5 +1,3 @@
-// Проект на Гитхабе: https://github.com/foxoter/mesto
-
 'use strict';
 
 /* Переменные */
@@ -7,24 +5,29 @@
 const cardsContainer = document.querySelector('.places-list');
 
 const newCardForm = document.querySelector('.popup');
+
 const newCardButton = document.querySelector('.user-info__button');
 const closeFormButton = newCardForm.querySelector('.popup__close');
 
 const editForm = document.querySelector('.edit-popup');
+
 const editProfileButton = document.querySelector('.user-info__edit');
-const closeEditButton = document.querySelector('.edit-popup__close');
+const closeEditButton = editForm.querySelector('.popup__close');
 
 const closePicButton = document.querySelector('.image-popup__close');
-
-const newCardData = document.forms.new;
-const editFormData = document.forms.edit;
+/* done - REVIEW. Можно лучше. В стилевых правилах написания js-кода требуется, чтобы поиск DOM-элементов во всём проекте
+осуществлялся одним способом, например только с помощью querySelector */
+const newCardData = document.querySelector('#new-card');
+const editFormData = document.querySelector('#edit-form');
 
 /* Функции */
 
-// Собрать новую карточку
-function createNewCard(name, link) {
+function createNewCard(object) {
   const markup = `<div class="place-card">
-        <div class="place-card__image" style="background-image: url(https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg)">
+        <div 
+        class="place-card__image" 
+        style="background-image: url(https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg)"
+        >
           <button class="place-card__delete-icon"></button>
         </div>
         <div class="place-card__description">
@@ -36,10 +39,8 @@ function createNewCard(name, link) {
   const shell = document.createElement('div');
   shell.insertAdjacentHTML('afterbegin', markup);
   const newCard = shell.firstElementChild;
-
-  newCard.querySelector('.place-card__name').textContent = name;
-  newCard.querySelector('.place-card__image').setAttribute('style', `background-image: url(${link})`);
-
+  newCard.querySelector('.place-card__name').textContent = object.name;
+  newCard.querySelector('.place-card__image').setAttribute('style', `background-image: url(${object.link})`);
   return newCard;
 }
 
@@ -51,51 +52,60 @@ function addCard(card) {
 // Добавить коллекцию карточек из массива
 function addCollection(array) {
   array.forEach((item) => {
-    const newCard = createNewCard(item.name, item.link);
+    const newCard = createNewCard(item);
     addCard(newCard);
   });
 }
 
 /* Обработчики событий */
 
-// Открыть и закрыть форму новой карточки
-function openForm() {
-  const addPlaceButton = newCardForm.querySelector('.popup__button');
-  const inputPlace = newCardData.elements.place;
-  const placeError = newCardData.querySelector('#place-error');
-  const linkError = newCardData.querySelector('#link-error');
-
-  if (!newCardForm.classList.contains('.popup_is-opened')) {
-    newCardData.reset();
-    addPlaceButton.classList.remove('popup__button_mode_on');
-    addPlaceButton.setAttribute('disabled', 'disabled');
-    placeError.textContent = '';
-    linkError.textContent = '';
-  }
-  newCardForm.classList.toggle('popup_is-opened');
-  inputPlace.focus();
+// Отрисовать и скрыть попап
+function renderPopup(popupElement) {
+  popupElement.classList.toggle('popup_is-opened');
+  popupElement.querySelector('.popup__input').focus();
 }
 
-// Открыть и закрыть форму редактирования профиля
-function openEditForm() {
+// Сбросить данные попапа
+function resetPopup(popupElement) {
+  const form = popupElement.querySelector('.popup__form');
+  const errors = popupElement.querySelectorAll('.error-message');
+  const button = popupElement.querySelector('.button');
+  if (popupElement.classList.contains('edit-popup')) {
+    button.classList.add('popup__button_mode_on');
+    button.removeAttribute('disabled');
+  } else {
+    button.classList.remove('popup__button_mode_on');
+    button.setAttribute('disabled', 'disabled');
+  }
+  form.reset();
+  errors.forEach(function (item) {
+    item.textContent = '';
+  });
+}
+
+// Открыть форму новой карточки
+function openNewCardForm(popupElement) {
+  if (!popupElement.classList.contains('.popup_is-opened')) {
+    resetPopup(popupElement);
+  }
+  renderPopup(popupElement);
+}
+
+
+// Открыть форму редактирования профиля
+function openEditForm(popupElement) {
   let heroName = document.querySelector('.user-info__name');
   let heroJob = document.querySelector('.user-info__job');
   const inputName = editFormData.elements.name;
   const inputAbout = editFormData.elements.about;
-  const nameError = editFormData.querySelector('#name-error');
-  const aboutError = editFormData.querySelector('#about-error');
-
-  if (!editForm.classList.contains('edit-popup_is-opened')) {
-    editFormData.reset();
-    nameError.textContent = '';
-    aboutError.textContent = '';
+  if (!popupElement.classList.contains('.popup_is-opened')) {
+    resetPopup(popupElement);
   }
-  editForm.classList.toggle('edit-popup_is-opened');
+  renderPopup(popupElement);
   inputName.value = heroName.textContent;
   inputAbout.value = heroJob.textContent;
-  inputName.focus();
-
 }
+
 
 // Сохранить обновленную информацию профиля
 function saveEditData(event) {
@@ -106,7 +116,7 @@ function saveEditData(event) {
   event.preventDefault();
   heroName.textContent = inputName.value;
   heroJob.textContent = inputAbout.value;
-  openEditForm();
+  openEditForm(editForm);
 }
 
 // Открыть и закрыть картинку
@@ -131,43 +141,45 @@ function likeHandler(event) {
 
 // Добавить новую карточку по клику
 function submitCardClick(event) {
+  const object = {};
   const inputPlace = newCardData.elements.place;
   const inputLink = newCardData.elements.link;
+  object.name = inputPlace.value;
+  object.link = inputLink.value;
   event.preventDefault();
-  const newCard = createNewCard(inputPlace.value, inputLink.value);
+  const newCard = createNewCard(object);
   addCard(newCard);
   newCardData.reset();
-  openForm();
+  openNewCardForm(newCardForm);
 }
 
 // Удалить карточку
 function deleteCard(event) {
   if (event.target.classList.contains('place-card__delete-icon')) {
     const card = event.target.closest('.place-card');
-    cardsContainer.removeChild(card);
+    card.remove();
   }
 }
 
 // Валидация текстового поля
-function checkInputValidity(event) {
-  const field = event.target;
-  const error = field.parentNode.querySelector(`#${field.id}-error`);
-  field.setCustomValidity('');
-  if (field.validity.valueMissing) {
-    field.setCustomValidity('Это обязательно поле');
-  } else if (field.validity.typeMismatch) {
-    field.setCustomValidity('Здесь должна быть ссылка');
-  } else if (field.validity.tooShort || field.validity.tooLong) {
-    field.setCustomValidity('Должно быть от 2 до 30 символов');
+function checkInputValidity(inputElement) {
+  const error = inputElement.parentNode.querySelector(`#${inputElement.id}-error`);
+  inputElement.setCustomValidity('');
+  if (inputElement.validity.valueMissing) {
+    inputElement.setCustomValidity('Это обязательно поле');
+  } else if (inputElement.validity.typeMismatch) {
+    inputElement.setCustomValidity('Здесь должна быть ссылка');
+  } else if (inputElement.validity.tooShort || inputElement.validity.tooLong) {
+    inputElement.setCustomValidity('Должно быть от 2 до 30 символов');
   }
-  error.textContent = field.validationMessage;
+  error.textContent = inputElement.validationMessage;
 }
 
 // Валидация кнопки
-function setSubmitButtonState(event) {
-  const elements = Array.from(event.currentTarget.elements);
-  const inputs = elements.slice(0, 2);
-  const button = elements[2];
+function setSubmitButtonState(form) {
+  const inputsTemp = form.querySelectorAll('input');
+  const button = form.querySelector('button');
+  const inputs = Array.from(inputsTemp);
   const buttonState = inputs.every(function (item) {
     return item.validity.valid;
   });
@@ -181,17 +193,22 @@ function setSubmitButtonState(event) {
 }
 
 // Повесить валидаторы на форму
-function setEventListeners(form) {
-  form.addEventListener('input', checkInputValidity);
-  form.addEventListener('input', setSubmitButtonState);
+function setEventListeners(popup) {
+  const form = popup.querySelector('form');
+  const inputs = popup.querySelectorAll('input');
+
+  inputs.forEach(function (item) {
+    item.addEventListener('input', function () {checkInputValidity(item)});
+  })
+  form.addEventListener('input', function () {setSubmitButtonState(form)});
 }
 
 /* Слушатели событий */
 
-newCardButton.addEventListener('click', openForm);
-closeFormButton.addEventListener('click', openForm);
-editProfileButton.addEventListener('click', openEditForm);
-closeEditButton.addEventListener('click', openEditForm);
+editProfileButton.addEventListener('click', function () {openEditForm(editForm)});
+closeEditButton.addEventListener('click', function () {openEditForm(editForm)});
+newCardButton.addEventListener('click', function (){openNewCardForm(newCardForm)});
+closeFormButton.addEventListener('click', function (){openNewCardForm(newCardForm)});
 editFormData.addEventListener('submit', saveEditData);
 cardsContainer.addEventListener('click', likeHandler);
 newCardData.addEventListener('submit', submitCardClick);
@@ -201,5 +218,5 @@ closePicButton.addEventListener('click', openImage);
 
 /* Вызовы функций */
 addCollection(initialCards);
-setEventListeners(editFormData);
-setEventListeners(newCardData);
+setEventListeners(editForm);
+setEventListeners(newCardForm);

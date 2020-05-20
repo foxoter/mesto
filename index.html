@@ -29,7 +29,7 @@
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
-        <form class="popup__form" name="new">
+        <form class="popup__form" id="new-card">
             <input
                 type="text"
                 name="place"
@@ -58,10 +58,10 @@
       </div>
     </div>
     <div class="edit-popup">
-      <div class="edit-popup__content">
-        <img src="./images/close.svg" alt="" class="edit-popup__close">
+      <div class="popup__content">
+        <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Редактировать профиль</h3>
-        <form class="popup__form" name="edit">
+        <form class="popup__form" id="edit-form">
           <input
               type="text"
               name="name"
@@ -84,8 +84,8 @@
           <span id="about-error" class="error-message"></span>
           <button
               type="submit"
-              class="button popup__button edit-popup__button"
-              disabled
+              class="button popup__button popup__button_type_edit popup__button_mode_on"
+
               name="save"
           >Сохранить</button>
         </form>

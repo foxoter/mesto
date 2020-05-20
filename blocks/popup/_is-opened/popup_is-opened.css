@@ -1,3 +1,7 @@
 .popup.popup_is-opened {
   display: flex;
 }
+
+.edit-popup.popup_is-opened {
+  display: flex;
+}
