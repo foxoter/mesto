@@ -14,7 +14,3 @@
     justify-content: center;
     display: none;
 }
-
-.image-popup_is-opened {
-    display: flex;
-}

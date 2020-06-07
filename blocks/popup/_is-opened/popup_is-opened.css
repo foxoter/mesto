@@ -5,3 +5,7 @@
 .edit-popup.popup_is-opened {
   display: flex;
 }
+
+.image-popup.popup_is-opened {
+  display: flex;
+}
