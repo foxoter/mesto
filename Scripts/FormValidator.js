@@ -3,9 +3,9 @@ class FormValidator {
     this.form = form;
     this.inputs = Array.from(this.form.querySelectorAll('input'));
     this.button = this.form.querySelector('button');
-    this.setSubmitButtonState = this.setSubmitButtonState.bind(this);
     this.checkInputValidity = this.checkInputValidity.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
+    this.setSubmitButtonState = this.setSubmitButtonState.bind(this);
     this.setEventListeners();
   }
 
@@ -27,6 +27,7 @@ class FormValidator {
   }
 
   setSubmitButtonState () {
+
     const buttonState = this.inputs.every(function (item) {
       return item.validity.valid;
     });
@@ -37,6 +38,14 @@ class FormValidator {
       this.button.classList.remove('popup__button_mode_on');
       this.button.setAttribute('disabled', 'disabled');
     }
+  }
+
+  reset () {
+    const errors = this.form.querySelectorAll('.error-message');
+    this.form.reset();
+    errors.forEach(function (item) {
+      item.textContent = '';
+    });
   }
 
   setEventListeners () {

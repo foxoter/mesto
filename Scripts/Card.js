@@ -1,15 +1,15 @@
 class Card {
-  constructor(name, link, imgHandler) {
-    this.name = name;
-    this.link = link;
+  constructor(objCard, imgHandler) {
+    this.name = objCard.name;
+    this.link = objCard.link;
     this.imgHandler = imgHandler;
   }
 
   // создает ДОМ-элемент карточки
   createCard() {
     const markup = `<div class="place-card">
-        <div 
-        class="place-card__image" 
+        <div
+        class="place-card__image"
         style="background-image: url(https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg)"
         >
           <button class="place-card__delete-icon"></button>
