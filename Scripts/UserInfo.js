@@ -1,8 +1,4 @@
 class UserInfo {
-  constructor(name,about) {
-    this.name = name;
-    this.about = about;
-  }
 
   setUserInfo = (nameNew,aboutNew) => {
     this.name = nameNew;

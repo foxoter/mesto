@@ -32,10 +32,67 @@ editProfileForm.closeButton.addEventListener('click', function () {
 const editFormValidator = new FormValidator(editFormData);
 const newCardFormValidator = new FormValidator(newCardData);
 
+
+
+// попап картинки
+const picElement = document.querySelector('.image-popup');
+const picClose = picElement.querySelector('.image-popup__close');
+const imagePopup = new PopupImg(picElement, picClose);
+
+// создает инстанс класса Card и преобразует его в ДОМ-ноду
+function assembleCard(cardObj,imgHandler) {
+  const card = new Card(cardObj,imgHandler);
+  const assembledCard = card.createCard();
+  return assembledCard;
+}
+
+// добавить новую карточку
+newCardData.addEventListener('submit', function (event) {
+  event.preventDefault();
+  const objCard = {};
+  objCard.name = event.target.elements.place.value;
+  objCard.link = event.target.elements.link.value;
+  const newCard =  assembleCard(objCard, imagePopup.open)
+  cardsContainer.addCard(newCard);
+  newCardPopup.open();
+  newCardFormValidator.reset();
+  newCardFormValidator.setSubmitButtonState();
+});
+
+const config = {
+  url: 'https://praktikum.tk/cohort11/',
+  headers: {
+    authorization: 'aafbd586-86fd-433f-8d97-fd0d2e79138b',
+  }
+}
+
+const api = new Api(config);
+
+// отрисовка карточек из коллекции
+api.getCards().then(res => {
+  const cardsContainer = new CardList(document.querySelector('.places-list'), res);
+  const collectionElements = [];
+  cardsContainer.collection.forEach(item => {
+    const newCard = assembleCard(item,imagePopup.open);
+    collectionElements.push(newCard);
+  });
+  cardsContainer.render(collectionElements);
+})
+  .catch(err => console.log(err));
+
+
 // управление данными профиля
-const userData = new UserInfo
-(document.querySelector('.user-info__name').textContent,
-  document.querySelector('.user-info__job').textContent);
+const userData = new UserInfo();
+const userName = document.querySelector('.user-info__name');
+const userAbout = document.querySelector('.user-info__job');
+
+api.getUser()
+  .then(data => {
+    userData.setUserInfo(data.name, data.about);
+    userData.updateUserInfo(userName, userAbout);
+  })
+  .catch(err => console.log(err));
+
 
 // дать форме данные из объекта при открытии
 editProfileButton.addEventListener('click', function () {
@@ -50,43 +107,8 @@ editFormData.addEventListener('submit', function (event) {
   event.preventDefault();
   const nameField = editForm.querySelector('#name');
   const aboutField = editForm.querySelector('#about');
-  const nameDisplay = document.querySelector('.user-info__name');
-  const aboutDisplay = document.querySelector('.user-info__job');
   userData.setUserInfo(nameField.value,aboutField.value);
-  userData.updateUserInfo(nameDisplay,aboutDisplay);
+  api.updateUser(userData.name,userData.about).catch(err => console.log(err));
+  userData.updateUserInfo(userName,userAbout);
   editProfileForm.open();
-})
-
-// попап картинки
-const picElement = document.querySelector('.image-popup');
-const picClose = picElement.querySelector('.image-popup__close');
-const imagePopup = new PopupImg(picElement, picClose);
-
-// создает инстанс класса Card и преобразует его в ДОМ-ноду
-function assembleCard(cardObj,imgHandler) {
-  const card = new Card(cardObj,imgHandler);
-  const assembledCard = card.createCard();
-  return assembledCard;
-}
-
-// отрисовка карточек из коллекции
-const cardsContainer = new CardList(document.querySelector('.places-list'), initialCards);
-const collectionElements = [];
-cardsContainer.collection.forEach(item => {
-  const newCard = assembleCard(item,imagePopup.open);
-  collectionElements.push(newCard);
-});
-cardsContainer.render(collectionElements);
-
-// добавить новую карточку
-newCardData.addEventListener('submit', function (event) {
-  event.preventDefault();
-  const objCard = {};
-  objCard.name = event.target.elements.place.value;
-  objCard.link = event.target.elements.link.value;
-  const newCard =  assembleCard(objCard, imagePopup.open)
-  cardsContainer.addCard(newCard);
-  newCardPopup.open();
-  newCardFormValidator.reset();
-  newCardFormValidator.setSubmitButtonState();
 });
