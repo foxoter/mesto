@@ -98,8 +98,9 @@ editFormData.addEventListener('submit', function (event) {
 });
 
 // отрисовка карточек из коллекции
+const cardsContainer = new CardList(document.querySelector('.places-list'), {});
 api.getCards().then(res => {
-  const cardsContainer = new CardList(document.querySelector('.places-list'), res);
+  cardsContainer.collection = res;
   const collectionElements = [];
   cardsContainer.collection.forEach(item => {
     const newCard = assembleCard(item,imagePopup.open);
