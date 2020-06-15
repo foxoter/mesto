@@ -1,5 +1,14 @@
 'use strict';
 
+// Подключение к серверу
+const config = {
+  url: 'https://praktikum.tk/cohort11/',
+  headers: {
+    authorization: 'aafbd586-86fd-433f-8d97-fd0d2e79138b',
+  }
+}
+const api = new Api(config);
+
 // попап новой карточки
 const newCardForm = document.querySelector('.popup');
 const newCardData = document.querySelector('#new-card');
@@ -32,8 +41,6 @@ editProfileForm.closeButton.addEventListener('click', function () {
 const editFormValidator = new FormValidator(editFormData);
 const newCardFormValidator = new FormValidator(newCardData);
 
-
-
 // попап картинки
 const picElement = document.querySelector('.image-popup');
 const picClose = picElement.querySelector('.image-popup__close');
@@ -59,28 +66,6 @@ newCardData.addEventListener('submit', function (event) {
   newCardFormValidator.setSubmitButtonState();
 });
 
-const config = {
-  url: 'https://praktikum.tk/cohort11/',
-  headers: {
-    authorization: 'aafbd586-86fd-433f-8d97-fd0d2e79138b',
-  }
-}
-
-const api = new Api(config);
-
-// отрисовка карточек из коллекции
-api.getCards().then(res => {
-  const cardsContainer = new CardList(document.querySelector('.places-list'), res);
-  const collectionElements = [];
-  cardsContainer.collection.forEach(item => {
-    const newCard = assembleCard(item,imagePopup.open);
-    collectionElements.push(newCard);
-  });
-  cardsContainer.render(collectionElements);
-})
-  .catch(err => console.log(err));
-
-
 // управление данными профиля
 const userData = new UserInfo();
 const userName = document.querySelector('.user-info__name');
@@ -92,7 +77,6 @@ api.getUser()
     userData.updateUserInfo(userName, userAbout);
   })
   .catch(err => console.log(err));
-
 
 // дать форме данные из объекта при открытии
 editProfileButton.addEventListener('click', function () {
@@ -112,3 +96,15 @@ editFormData.addEventListener('submit', function (event) {
   userData.updateUserInfo(userName,userAbout);
   editProfileForm.open();
 });
+
+// отрисовка карточек из коллекции
+api.getCards().then(res => {
+  const cardsContainer = new CardList(document.querySelector('.places-list'), res);
+  const collectionElements = [];
+  cardsContainer.collection.forEach(item => {
+    const newCard = assembleCard(item,imagePopup.open);
+    collectionElements.push(newCard);
+  });
+  cardsContainer.render(collectionElements);
+})
+  .catch(err => console.log(err));
