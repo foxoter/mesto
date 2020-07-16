@@ -11,9 +11,14 @@ class Api {
       }
     })
       .then(res => {
-        return res.json()
+        if (res.ok) {
+          return res.json()
+        } else {
+          return Promise.reject(res.status);
+        }
       });
   }
+
 
   getUser() {
     return fetch(`${this.url}users/me`, {
@@ -22,9 +27,14 @@ class Api {
       }
     })
       .then(res => {
-        return res.json()
+        if (res.ok) {
+          return res.json()
+        } else {
+          return Promise.reject(res.status);
+        }
       });
   }
+
 
   updateUser(name,about) {
     return fetch(`${this.url}users/me`, {
@@ -37,6 +47,13 @@ class Api {
         name: name,
         about: about
       })
+    })
+      .then(res => {
+      if (res.ok) {
+        return res.json()
+      } else {
+        return Promise.reject(res.status);
+      }
     });
   }
 }

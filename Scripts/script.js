@@ -91,21 +91,26 @@ editFormData.addEventListener('submit', function (event) {
   event.preventDefault();
   const nameField = editForm.querySelector('#name');
   const aboutField = editForm.querySelector('#about');
-  userData.setUserInfo(nameField.value,aboutField.value);
-  api.updateUser(userData.name,userData.about).catch(err => console.log(err));
-  userData.updateUserInfo(userName,userAbout);
+  api.updateUser(nameField.value,aboutField.value)
+    .then(() => {
+      userData.setUserInfo(nameField.value,aboutField.value);
+      userData.updateUserInfo(userName,userAbout);
+    })
+    .catch(err => console.log(err));
   editProfileForm.open();
 });
 
 // отрисовка карточек из коллекции
-const cardsContainer = new CardList(document.querySelector('.places-list'), {});
-api.getCards().then(res => {
-  cardsContainer.collection = res;
-  const collectionElements = [];
-  cardsContainer.collection.forEach(item => {
-    const newCard = assembleCard(item,imagePopup.open);
-    collectionElements.push(newCard);
-  });
-  cardsContainer.render(collectionElements);
+const cardsContainer = new CardList(document.querySelector('.places-list'));
+api.getCards()
+  .then(res => {
+    cardsContainer.render(res.map(function (item) {
+      return assembleCard(item,imagePopup.open);
+    }))
 })
   .catch(err => console.log(err));
+
+/**
+ * Замечания исправлены, работа принята.
+ * Желаю успехов в дальнейшем обучении!
+ */

@@ -1,7 +1,7 @@
 class CardList {
-  constructor(container, collection) {
+  constructor(container) {
     this.container = container;
-    this.collection = collection;
+    // this.collection = collection;
   }
 
   // добавить элемент карточки в контейнер
