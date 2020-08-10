@@ -70,11 +70,12 @@ newCardData.addEventListener('submit', function (event) {
 const userData = new UserInfo();
 const userName = document.querySelector('.user-info__name');
 const userAbout = document.querySelector('.user-info__job');
+const userAvatar = document.querySelector('.user-info__photo');
 
 api.getUser()
   .then(data => {
-    userData.setUserInfo(data.name, data.about);
-    userData.updateUserInfo(userName, userAbout);
+    userData.setUserInfo(data.name, data.about, data.avatar);
+    userData.updateUserInfo(userName, userAbout, userAvatar);
   })
   .catch(err => console.log(err));
 
@@ -109,8 +110,3 @@ api.getCards()
     }))
 })
   .catch(err => console.log(err));
-
-/**
- * Замечания исправлены, работа принята.
- * Желаю успехов в дальнейшем обучении!
- */

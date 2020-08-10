@@ -1,4 +1,4 @@
-class  Popup {
+class Popup {
   constructor(popup, openButton, closeButton) {
     this.popup = popup;
     this.openButton = openButton;
