@@ -56,4 +56,25 @@ class Api {
       }
     });
   }
+
+  postCard(name, link) {
+    return fetch(`${this.url}cards`, {
+      method: 'POST',
+      headers: {
+        authorization: this.headers.authorization,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        link: link
+      })
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        } else {
+          return Promise.reject(res.status);
+        }
+      });
+  }
 }

@@ -56,14 +56,20 @@ function assembleCard(cardObj,imgHandler) {
 // добавить новую карточку
 newCardData.addEventListener('submit', function (event) {
   event.preventDefault();
-  const objCard = {};
-  objCard.name = event.target.elements.place.value;
-  objCard.link = event.target.elements.link.value;
-  const newCard =  assembleCard(objCard, imagePopup.open)
-  cardsContainer.addCard(newCard);
-  newCardPopup.open();
-  newCardFormValidator.reset();
-  newCardFormValidator.setSubmitButtonState();
+  const cardName = event.target.elements.place.value;
+  const cardLink = event.target.elements.link.value;
+  api.postCard(cardName, cardLink)
+    .then(data => {
+      const objCard = {};
+      objCard.name = data.name;
+      objCard.link = data.link;
+      const newCard = assembleCard(objCard, imagePopup.open);
+      cardsContainer.addCard(newCard);
+      newCardPopup.open();
+      newCardFormValidator.reset();
+      newCardFormValidator.setSubmitButtonState();
+    })
+    .catch(err => console.log(err));
 });
 
 // управление данными профиля
