@@ -3,6 +3,7 @@ class Card {
     this.name = objCard.name;
     this.link = objCard.link;
     this.imgHandler = imgHandler;
+    this.likes = objCard.likes;
   }
 
   // создает ДОМ-элемент карточки
@@ -16,7 +17,10 @@ class Card {
         </div>
         <div class="place-card__description">
           <h3 class="place-card__name">Камчатка</h3>
-          <button class="place-card__like-icon"></button>
+          <div class="place-card__likes">
+            <button class="place-card__like-icon"></button>
+            <p class="place-card__like-count">0</p>
+          </div>
         </div>
       </div>`;
 
@@ -25,6 +29,7 @@ class Card {
     const newCard = shell.firstElementChild;
     newCard.querySelector('.place-card__name').textContent = this.name;
     newCard.querySelector('.place-card__image').setAttribute('style', `background-image: url(${this.link})`);
+    newCard.querySelector('.place-card__like-count').textContent = this.likes.length;
     this.setEventListeners(newCard);
     return newCard;
   }

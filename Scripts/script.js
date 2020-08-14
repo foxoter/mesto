@@ -2,7 +2,7 @@
 
 // Подключение к серверу
 const config = {
-  url: 'https://praktikum.tk/cohort11/',
+  url: 'https://nomoreparties.co/cohort11/',
   headers: {
     authorization: 'aafbd586-86fd-433f-8d97-fd0d2e79138b',
   }
@@ -56,14 +56,21 @@ function assembleCard(cardObj,imgHandler) {
 // добавить новую карточку
 newCardData.addEventListener('submit', function (event) {
   event.preventDefault();
-  const objCard = {};
-  objCard.name = event.target.elements.place.value;
-  objCard.link = event.target.elements.link.value;
-  const newCard =  assembleCard(objCard, imagePopup.open)
-  cardsContainer.addCard(newCard);
-  newCardPopup.open();
-  newCardFormValidator.reset();
-  newCardFormValidator.setSubmitButtonState();
+  const cardName = event.target.elements.place.value;
+  const cardLink = event.target.elements.link.value;
+  api.postCard(cardName, cardLink)
+    .then(data => {
+      const objCard = {};
+      objCard.name = data.name;
+      objCard.link = data.link;
+      objCard.likes = [];
+      const newCard = assembleCard(objCard, imagePopup.open);
+      cardsContainer.addCard(newCard);
+      newCardPopup.open();
+      newCardFormValidator.reset();
+      newCardFormValidator.setSubmitButtonState();
+    })
+    .catch(err => console.log(err));
 });
 
 // управление данными профиля
