@@ -2,7 +2,7 @@
 
 // Подключение к серверу
 const config = {
-  url: 'https://praktikum.tk/cohort11/',
+  url: 'https://nomoreparties.co/cohort11/',
   headers: {
     authorization: 'aafbd586-86fd-433f-8d97-fd0d2e79138b',
   }
@@ -63,6 +63,7 @@ newCardData.addEventListener('submit', function (event) {
       const objCard = {};
       objCard.name = data.name;
       objCard.link = data.link;
+      objCard.likes = [];
       const newCard = assembleCard(objCard, imagePopup.open);
       cardsContainer.addCard(newCard);
       newCardPopup.open();
