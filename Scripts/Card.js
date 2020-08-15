@@ -4,6 +4,7 @@ class Card {
     this.link = objCard.link;
     this.imgHandler = imgHandler;
     this.likes = objCard.likes;
+    this.deletable = true;
   }
 
   // создает ДОМ-элемент карточки
@@ -30,6 +31,10 @@ class Card {
     newCard.querySelector('.place-card__name').textContent = this.name;
     newCard.querySelector('.place-card__image').setAttribute('style', `background-image: url(${this.link})`);
     newCard.querySelector('.place-card__like-count').textContent = this.likes.length;
+    const deleteIcon = newCard.querySelector('.place-card__delete-icon');
+    if (this.deletable) {
+      deleteIcon.setAttribute('style', 'display: block');
+    }
     this.setEventListeners(newCard);
     return newCard;
   }

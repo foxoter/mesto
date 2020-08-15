@@ -2,6 +2,7 @@ class Api {
   constructor(config) {
     this.url = config.url;
     this.headers = config.headers;
+    this.user = config.user;
   }
 
   getCards() {
@@ -34,7 +35,6 @@ class Api {
         }
       });
   }
-
 
   updateUser(name,about) {
     return fetch(`${this.url}users/me`, {
@@ -76,5 +76,9 @@ class Api {
           return Promise.reject(res.status);
         }
       });
+  }
+
+  deleteCard() {
+
   }
 }
