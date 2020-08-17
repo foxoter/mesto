@@ -78,7 +78,18 @@ class Api {
       });
   }
 
-  deleteCard() {
-
+  deleteCard = (cardId) => {
+    return fetch(`${this.url}cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this.headers.authorization,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return Promise.reject(res.status);
+        }
+      });
   }
 }
