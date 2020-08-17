@@ -5,7 +5,8 @@ const config = {
   url: 'https://nomoreparties.co/cohort11/',
   headers: {
     authorization: 'aafbd586-86fd-433f-8d97-fd0d2e79138b',
-  }
+  },
+  user: 'ab33c4417cb29a50bc589a09'
 }
 const api = new Api(config);
 
@@ -47,8 +48,11 @@ const picClose = picElement.querySelector('.image-popup__close');
 const imagePopup = new PopupImg(picElement, picClose);
 
 // создает инстанс класса Card и преобразует его в ДОМ-ноду
-function assembleCard(cardObj,imgHandler) {
-  const card = new Card(cardObj,imgHandler);
+function assembleCard(cardObj,imgHandler,removeHandler) {
+  const card = new Card(cardObj,imgHandler,removeHandler);
+  if (cardObj.owner._id !== api.user) {
+    card.deletable = false;
+  }
   const assembledCard = card.createCard();
   return assembledCard;
 }
@@ -60,11 +64,7 @@ newCardData.addEventListener('submit', function (event) {
   const cardLink = event.target.elements.link.value;
   api.postCard(cardName, cardLink)
     .then(data => {
-      const objCard = {};
-      objCard.name = data.name;
-      objCard.link = data.link;
-      objCard.likes = [];
-      const newCard = assembleCard(objCard, imagePopup.open);
+      const newCard = assembleCard(data, imagePopup.open, api.deleteCard);
       cardsContainer.addCard(newCard);
       newCardPopup.open();
       newCardFormValidator.reset();
@@ -113,7 +113,7 @@ const cardsContainer = new CardList(document.querySelector('.places-list'));
 api.getCards()
   .then(res => {
     cardsContainer.render(res.map(function (item) {
-      return assembleCard(item,imagePopup.open);
+      return assembleCard(item, imagePopup.open, api.deleteCard);
     }))
 })
   .catch(err => console.log(err));

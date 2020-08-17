@@ -1,9 +1,13 @@
 class Card {
-  constructor(objCard, imgHandler) {
+  constructor(objCard, imgHandler, removeHandler) {
     this.name = objCard.name;
     this.link = objCard.link;
     this.imgHandler = imgHandler;
     this.likes = objCard.likes;
+    this.deletable = true;
+    this.cardId = objCard._id;
+    this.removeHandler = removeHandler;
+    this.remove = this.remove.bind(this);
   }
 
   // создает ДОМ-элемент карточки
@@ -30,6 +34,10 @@ class Card {
     newCard.querySelector('.place-card__name').textContent = this.name;
     newCard.querySelector('.place-card__image').setAttribute('style', `background-image: url(${this.link})`);
     newCard.querySelector('.place-card__like-count').textContent = this.likes.length;
+    const deleteIcon = newCard.querySelector('.place-card__delete-icon');
+    if (this.deletable) {
+      deleteIcon.setAttribute('style', 'display: block');
+    }
     this.setEventListeners(newCard);
     return newCard;
   }
@@ -41,10 +49,17 @@ class Card {
 
   // обработчик удаления
   remove(event) {
-    const card = event.target.closest('.place-card');
-    card.remove();
-    card.removeEventListener('click', this.like);
-    card.removeEventListener('click', this.remove);
+    if (confirm('Хотите удалить?')) {
+      const card = event.target.closest('.place-card');
+      this.removeHandler(this.cardId)
+        .then(() => {
+          card.remove();
+          card.removeEventListener('click', this.like);
+          card.removeEventListener('click', this.remove);
+          card.removeEventListener('click', this.imgHandler);
+        })
+        .catch(err => console.log(err));
+    }
   }
 
   // вешает обработчики
