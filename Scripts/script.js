@@ -48,10 +48,13 @@ const picClose = picElement.querySelector('.image-popup__close');
 const imagePopup = new PopupImg(picElement, picClose);
 
 // создает инстанс класса Card и преобразует его в ДОМ-ноду
-function assembleCard(cardObj,imgHandler,removeHandler) {
-  const card = new Card(cardObj,imgHandler,removeHandler);
+function assembleCard(cardObj,imgHandler,api) {
+  const card = new Card(cardObj,imgHandler,api);
   if (cardObj.owner._id !== api.user) {
     card.deletable = false;
+  }
+  if (cardObj.likes.find(item => item._id === api.user)) {
+    card.isLiked = true;
   }
   const assembledCard = card.createCard();
   return assembledCard;
@@ -64,7 +67,7 @@ newCardData.addEventListener('submit', function (event) {
   const cardLink = event.target.elements.link.value;
   api.postCard(cardName, cardLink)
     .then(data => {
-      const newCard = assembleCard(data, imagePopup.open, api.deleteCard);
+      const newCard = assembleCard(data, imagePopup.open, api);
       cardsContainer.addCard(newCard);
       newCardPopup.open();
       newCardFormValidator.reset();
@@ -113,7 +116,7 @@ const cardsContainer = new CardList(document.querySelector('.places-list'));
 api.getCards()
   .then(res => {
     cardsContainer.render(res.map(function (item) {
-      return assembleCard(item, imagePopup.open, api.deleteCard);
+      return assembleCard(item, imagePopup.open, api);
     }))
 })
   .catch(err => console.log(err));

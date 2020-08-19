@@ -92,4 +92,36 @@ class Api {
         }
       });
   }
+
+  likeCard = (cardId) => {
+    return fetch(`${this.url}cards/like/${cardId}`, {
+      method: 'PUT',
+      headers: {
+        authorization: this.headers.authorization,
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return Promise.reject(res.status);
+        } else {
+          return res.json();
+        }
+      });
+  }
+
+  dislikeCard = (cardId) => {
+    return fetch(`${this.url}cards/like/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this.headers.authorization,
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return Promise.reject(res.status);
+        } else {
+          return res.json();
+        }
+      });
+  }
 }
