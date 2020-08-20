@@ -7,6 +7,12 @@
   background-position: center;
 }
 
+.user-info__photo:hover {
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.5s linear;
+}
+
 @media screen and (max-width: 980px) {
   .user-info__photo {
     margin-top: 40px;

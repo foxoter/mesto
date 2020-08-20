@@ -10,6 +10,33 @@ const config = {
 }
 const api = new Api(config);
 
+// аватар
+const avatarOpenButton = document.querySelector('.user-info__photo');
+const avatarForm = document.querySelector('.avatar-popup');
+const avatarFormData = avatarForm.querySelector('.popup__form');
+const avatarCloseButton = avatarForm.querySelector('.popup__close');
+const avatarPopup = new Popup(avatarForm, avatarOpenButton, avatarCloseButton);
+avatarPopup.openButton.addEventListener('click', avatarPopup.open);
+avatarPopup.closeButton.addEventListener('click', function () {
+  avatarPopup.open();
+  avatarFormValidator.reset();
+  avatarFormValidator.setSubmitButtonState();
+})
+
+// обновить аватар
+avatarFormData.addEventListener('submit', function (event) {
+  event.preventDefault();
+  const avatarLink = event.target.avatar.value;
+  api.updateAvatar(avatarLink)
+    .then(data => {
+      avatarPopup.openButton.style.backgroundImage = `url("${data.avatar}")`;
+      avatarPopup.open();
+      avatarFormValidator.reset();
+      avatarFormValidator.setSubmitButtonState();
+    })
+    .catch(err => console.log(err));
+})
+
 // попап новой карточки
 const newCardForm = document.querySelector('.popup');
 const newCardData = document.querySelector('#new-card');
@@ -41,6 +68,7 @@ editProfileForm.closeButton.addEventListener('click', function () {
 // валидировать формы
 const editFormValidator = new FormValidator(editFormData);
 const newCardFormValidator = new FormValidator(newCardData);
+const avatarFormValidator = new FormValidator(avatarFormData);
 
 // попап картинки
 const picElement = document.querySelector('.image-popup');
@@ -56,8 +84,7 @@ function assembleCard(cardObj,imgHandler,api) {
   if (cardObj.likes.find(item => item._id === api.user)) {
     card.isLiked = true;
   }
-  const assembledCard = card.createCard();
-  return assembledCard;
+  return card.createCard();
 }
 
 // добавить новую карточку

@@ -57,9 +57,31 @@
         </form>
       </div>
     </div>
+    <div class="avatar-popup">
+      <div class="popup__content">
+        <img src="./images/close.svg" alt="close-icon" class="popup__close">
+        <h3 class="popup__title">Обновить аватар</h3>
+        <form class="popup__form">
+          <input
+              type="url"
+              name="avatar"
+              id="avatar"
+              class="popup__input popup__input_type_link-url"
+              placeholder="Ссылка на картинку"
+              required
+          >
+          <span id="avatar-error" class="error-message"></span>
+          <button
+              type="submit"
+              class="button popup__button popup__button_type_edit"
+              disabled
+          >Сохранить</button>
+        </form>
+      </div>
+    </div>
     <div class="edit-popup">
       <div class="popup__content">
-        <img src="./images/close.svg" alt="" class="popup__close">
+        <img src="./images/close.svg" alt="close-icon" class="popup__close">
         <h3 class="popup__title">Редактировать профиль</h3>
         <form class="popup__form" id="edit-form">
           <input

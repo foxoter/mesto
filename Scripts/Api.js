@@ -114,7 +114,7 @@ class Api {
       method: 'DELETE',
       headers: {
         authorization: this.headers.authorization,
-      }
+      },
     })
       .then(res => {
         if (!res.ok) {
@@ -123,5 +123,25 @@ class Api {
           return res.json();
         }
       });
+  }
+
+  updateAvatar = (link) => {
+    return fetch(`${this.url}users/me/avatar`, {
+      method: 'PATCH',
+      headers: {
+        authorization: this.headers.authorization,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        avatar: `${link}`,
+      })
+    })
+      .then(res => {
+      if (!res.ok) {
+        return Promise.reject(res.status);
+      } else {
+        return res.json();
+      }
+    });
   }
 }
