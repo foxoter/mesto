@@ -23,6 +23,20 @@ avatarPopup.closeButton.addEventListener('click', function () {
   avatarFormValidator.setSubmitButtonState();
 })
 
+// обновить аватар
+avatarFormData.addEventListener('submit', function (event) {
+  event.preventDefault();
+  const avatarLink = event.target.avatar.value;
+  api.updateAvatar(avatarLink)
+    .then(data => {
+      avatarPopup.openButton.style.backgroundImage = `url("${data.avatar}")`;
+      avatarPopup.open();
+      avatarFormValidator.reset();
+      avatarFormValidator.setSubmitButtonState();
+    })
+    .catch(err => console.log(err));
+})
+
 // попап новой карточки
 const newCardForm = document.querySelector('.popup');
 const newCardData = document.querySelector('#new-card');
@@ -70,8 +84,7 @@ function assembleCard(cardObj,imgHandler,api) {
   if (cardObj.likes.find(item => item._id === api.user)) {
     card.isLiked = true;
   }
-  const assembledCard = card.createCard();
-  return assembledCard;
+  return card.createCard();
 }
 
 // добавить новую карточку
