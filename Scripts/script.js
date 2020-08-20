@@ -10,6 +10,19 @@ const config = {
 }
 const api = new Api(config);
 
+// аватар
+const avatarOpenButton = document.querySelector('.user-info__photo');
+const avatarForm = document.querySelector('.avatar-popup');
+const avatarFormData = avatarForm.querySelector('.popup__form');
+const avatarCloseButton = avatarForm.querySelector('.popup__close');
+const avatarPopup = new Popup(avatarForm, avatarOpenButton, avatarCloseButton);
+avatarPopup.openButton.addEventListener('click', avatarPopup.open);
+avatarPopup.closeButton.addEventListener('click', function () {
+  avatarPopup.open();
+  avatarFormValidator.reset();
+  avatarFormValidator.setSubmitButtonState();
+})
+
 // попап новой карточки
 const newCardForm = document.querySelector('.popup');
 const newCardData = document.querySelector('#new-card');
@@ -41,6 +54,7 @@ editProfileForm.closeButton.addEventListener('click', function () {
 // валидировать формы
 const editFormValidator = new FormValidator(editFormData);
 const newCardFormValidator = new FormValidator(newCardData);
+const avatarFormValidator = new FormValidator(avatarFormData);
 
 // попап картинки
 const picElement = document.querySelector('.image-popup');
