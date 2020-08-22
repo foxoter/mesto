@@ -2,12 +2,18 @@ class UserInfo {
   setUserInfo = (nameNew,aboutNew, avatarNew) => {
     this.name = nameNew;
     this.about = aboutNew;
-    this.avatar = avatarNew;
   }
 
-  updateUserInfo (nameField, aboutField, avatarElement) {
+  updateUserInfo (nameField, aboutField) {
     nameField.textContent = this.name;
     aboutField.textContent = this.about;
-    avatarElement.style.backgroundImage = `url(${this.avatar})`
+  }
+
+  setAvatar = (avatarLink) => {
+    this.avatar = avatarLink;
+  }
+
+  updateAvatar = (avatarElement) => {
+    avatarElement.style.backgroundImage = `url(${this.avatar})`;
   }
 }
