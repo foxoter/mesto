@@ -27,12 +27,15 @@ avatarPopup.closeButton.addEventListener('click', function () {
 avatarFormData.addEventListener('submit', function (event) {
   event.preventDefault();
   const avatarLink = event.target.avatar.value;
+  const avatarSubmitButton = avatarFormData.querySelector('.button');
+  avatarSubmitButton.textContent = 'Загрузка...';
   api.updateAvatar(avatarLink)
     .then(data => {
       avatarPopup.openButton.style.backgroundImage = `url("${data.avatar}")`;
       avatarPopup.open();
       avatarFormValidator.reset();
       avatarFormValidator.setSubmitButtonState();
+      avatarSubmitButton.textContent = 'Сохранить';
     })
     .catch(err => console.log(err));
 })
@@ -92,6 +95,9 @@ newCardData.addEventListener('submit', function (event) {
   event.preventDefault();
   const cardName = event.target.elements.place.value;
   const cardLink = event.target.elements.link.value;
+  const addCardButton = newCardData.querySelector('.button');
+  addCardButton.style.fontSize = '18px';
+  addCardButton.textContent = 'Загрузка...';
   api.postCard(cardName, cardLink)
     .then(data => {
       const newCard = assembleCard(data, imagePopup.open, api);
@@ -99,6 +105,8 @@ newCardData.addEventListener('submit', function (event) {
       newCardPopup.open();
       newCardFormValidator.reset();
       newCardFormValidator.setSubmitButtonState();
+      addCardButton.style.fontSize = '36px';
+      addCardButton.textContent = '+';
     })
     .catch(err => console.log(err));
 });
@@ -111,8 +119,10 @@ const userAvatar = document.querySelector('.user-info__photo');
 
 api.getUser()
   .then(data => {
-    userData.setUserInfo(data.name, data.about, data.avatar);
-    userData.updateUserInfo(userName, userAbout, userAvatar);
+    userData.setUserInfo(data.name, data.about);
+    userData.setAvatar(data.avatar);
+    userData.updateUserInfo(userName, userAbout);
+    userData.updateAvatar(userAvatar);
   })
   .catch(err => console.log(err));
 
@@ -129,13 +139,16 @@ editFormData.addEventListener('submit', function (event) {
   event.preventDefault();
   const nameField = editForm.querySelector('#name');
   const aboutField = editForm.querySelector('#about');
+  const updateProfileButton = editFormData.querySelector('.button');
+  updateProfileButton.textContent = 'Загрузка...';
   api.updateUser(nameField.value,aboutField.value)
-    .then(() => {
-      userData.setUserInfo(nameField.value,aboutField.value);
+    .then((data) => {
+      userData.setUserInfo(data.name, data.about);
       userData.updateUserInfo(userName,userAbout);
+      updateProfileButton.textContent = 'Сохранить';
+      editProfileForm.open();
     })
     .catch(err => console.log(err));
-  editProfileForm.open();
 });
 
 // отрисовка карточек из коллекции
