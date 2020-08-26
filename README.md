@@ -1,12 +1,13 @@
 # Mesto
 
-Single page application built in 3 training iterations to learn DOM, OOP, API. 
+Instagram prototype built to practice DOM, ES6, OOP, and Promises.
 
 Functionality:
 * add new cards
 * delete existing 
 * toggle likes
 * edit profile info
+* edit profile photo
 
 ## Technologies used
 
